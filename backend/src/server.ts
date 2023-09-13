@@ -1,5 +1,17 @@
 import app from "./app";
+import { client } from "./utils/database";
 
 const port = 5000;
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const start = async () => {
+  try {
+    // await sequelize.authenticate();
+    await client.connect();
+    console.log("Database connection has been established successfully.");
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    process.exit(1);
+  }
+};
+start();
