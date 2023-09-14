@@ -6,13 +6,18 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/userController";
+import {
+  createUserValidation,
+  loginUserValidation,
+} from "../middleware/userValidators";
+import { authenticate } from "../middleware/authentication";
 
 const router = express.Router();
 
-router.route("/").post(createUser);
-router.route("/").delete(deleteUser);
-router.route("/login").post(loginUser);
-router.route("/profile").get(getUser);
-router.route("/profile").put(updateUser);
+router.route("/").post(createUserValidation, createUser);
+router.route("/").delete(authenticate, deleteUser);
+router.route("/login").post(loginUserValidation, loginUser);
+router.route("/profile").get(authenticate, getUser);
+router.route("/profile").put(authenticate, updateUser);
 
 export default router;
