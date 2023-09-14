@@ -1,12 +1,11 @@
 import app from "./app";
-import { client } from "./utils/database";
+import { sequelize } from "./utils/database";
 
 const port = 5000;
 
 const start = async () => {
   try {
-    // await sequelize.authenticate();
-    await client.connect();
+    await sequelize.authenticate();
     console.log("Database connection has been established successfully.");
     app.listen(port, () => console.log(`Listening on port ${port}`));
   } catch (error) {
