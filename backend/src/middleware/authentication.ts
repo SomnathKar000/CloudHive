@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "./errorHandling";
-import { validator } from "../utils/validation";
+import { validator } from "../services/UserService";
 
 export interface AuthenticatedRequest extends Request {
   user?: { id: string };
