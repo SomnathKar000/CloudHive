@@ -8,12 +8,15 @@ import { errorHandler, notFound } from "./middleware/errorHandling";
 
 const app = express();
 
+// Middleware
 app.use(bodyParser.json());
-
 app.use(cors());
+
+// Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/files", fileRoutes);
 
+// Error handling middleware
 app.use(errorHandler);
 app.use(notFound);
 
