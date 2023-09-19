@@ -9,7 +9,7 @@ import {
 import {
   createUserValidation,
   loginUserValidation,
-} from "../middleware/userValidators";
+} from "../middleware/validators";
 import { authenticate } from "../middleware/authentication";
 
 const router = express.Router();
