@@ -4,8 +4,6 @@ import { validationResult } from "express-validator";
 import { AppError, ValidationError } from "../middleware/errorHandling";
 import {
   createToken,
-  validateName,
-  validatePassword,
   generateHashPassword,
   updateUserData,
   passwordMatch,
@@ -81,14 +79,19 @@ const getUser = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 const updateUser = async (req: AuthenticatedRequest, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ValidationError(errors.array()[0].msg);
+  }
   const { user } = req;
   const existingUser = await User.findByPk(user?.id);
   if (!existingUser) {
     throw new AppError("User not found", 404);
   }
-  const { name, password } = req.body;
-  validateName(name);
-  validatePassword(password);
+  const { name, password, currentPassword } = req.body;
+
+  await passwordMatch(existingUser, currentPassword);
+
   updateUserData(existingUser, password, name);
 
   await existingUser.save();

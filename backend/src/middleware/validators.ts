@@ -17,6 +17,23 @@ const loginUserValidation = [
     .withMessage("Enter a valid password"),
 ];
 
+const updateUserValidation = [
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage("Enter a valid name"),
+  body("password")
+    .optional()
+    .trim()
+    .isLength({ min: 5 })
+    .withMessage("Enter a valid password"),
+  body("currentPassword")
+    .trim()
+    .isLength({ min: 5 })
+    .withMessage("Enter a valid password"),
+];
+
 const presignedUrlValidation = [
   body("fileName")
     .trim()
@@ -40,4 +57,5 @@ export {
   loginUserValidation,
   presignedUrlValidation,
   getAndDeleteFileValidation,
+  updateUserValidation,
 };

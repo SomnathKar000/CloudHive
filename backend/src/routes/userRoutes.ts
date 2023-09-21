@@ -9,6 +9,7 @@ import {
 import {
   createUserValidation,
   loginUserValidation,
+  updateUserValidation,
 } from "../middleware/validators";
 import { authenticate } from "../middleware/authentication";
 
@@ -18,6 +19,6 @@ router.route("/").post(createUserValidation, createUser);
 router.route("/").delete(authenticate, deleteUser);
 router.route("/login").post(loginUserValidation, loginUser);
 router.route("/profile").get(authenticate, getUser);
-router.route("/profile").put(authenticate, updateUser);
+router.route("/profile").put(authenticate, updateUserValidation, updateUser);
 
 export default router;

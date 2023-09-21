@@ -38,16 +38,6 @@ const generateHashPassword = (password: string) => {
   return becryptjs.hashSync(password, salt);
 };
 
-const validateName = (name: string | undefined) => {
-  if (name && name.length < 3) throw new AppError("Enter a valid name", 400);
-};
-
-const validatePassword = (password: string | undefined) => {
-  if (password && password.length < 5) {
-    throw new AppError("Enter a valid password", 400);
-  }
-};
-
 const updateUserData = (
   user: User,
   password: string | undefined,
@@ -72,8 +62,6 @@ export {
   createToken,
   validator,
   generateHashPassword,
-  validateName,
-  validatePassword,
   updateUserData,
   passwordMatch,
 };
