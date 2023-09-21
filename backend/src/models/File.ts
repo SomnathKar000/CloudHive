@@ -4,7 +4,7 @@ import { User } from "./User";
 
 export class File extends Model {
   public id!: number;
-  public filename!: string;
+  public fileName!: string;
   public userId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -17,10 +17,17 @@ File.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    filename: {
+    fileName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
     },
   },
   {

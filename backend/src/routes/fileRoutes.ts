@@ -4,15 +4,19 @@ import {
   getPreSignedUrl,
   getFile,
   deleteFile,
+  getAllFiles,
 } from "../controllers/fileController";
-import { presignedUrlValidation } from "../middleware/validators";
+import {
+  presignedUrlValidation,
+  getAndDeleteFileValidation,
+} from "../middleware/validators";
 
 const router = express.Router();
 
-router.route("/upload").post(uploadFile);
+router.route("/").get(getAllFiles);
+router.route("/upload/:fileName").post(getAndDeleteFileValidation, uploadFile);
 router.route("/presigned-url").post(presignedUrlValidation, getPreSignedUrl);
-
-router.route("/:id").get(getFile);
-router.route("/:id").delete(deleteFile);
+router.route("/:fileName").get(getAndDeleteFileValidation, getFile);
+router.route("/:fileName").delete(getAndDeleteFileValidation, deleteFile);
 
 export default router;

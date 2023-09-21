@@ -1,19 +1,43 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 const createUserValidation = [
-  body("name").isLength({ min: 3 }).withMessage("Enter a valid name"),
-  body("email").isEmail().withMessage("Enter a valid email"),
-  body("password").isLength({ min: 5 }).withMessage("Enter a valid password"),
+  body("name").trim().isLength({ min: 3 }).withMessage("Enter a valid name"),
+  body("email").trim().isEmail().withMessage("Enter a valid email"),
+  body("password")
+    .trim()
+    .isLength({ min: 5 })
+    .withMessage("Enter a valid password"),
 ];
 
 const loginUserValidation = [
-  body("email").isEmail().withMessage("Enter a valid email"),
-  body("password").isLength({ min: 5 }).withMessage("Enter a valid password"),
+  body("email").trim().isEmail().withMessage("Enter a valid email"),
+  body("password")
+    .trim()
+    .isLength({ min: 5 })
+    .withMessage("Enter a valid password"),
 ];
 
 const presignedUrlValidation = [
-  body("fileName").isLength({ min: 2 }).withMessage("Enter a valid file name"),
-  body("fileType").isLength({ min: 2 }).withMessage("Enter a valid file type"),
+  body("fileName")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("Enter a valid file name"),
+  body("fileType")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("Enter a valid file type"),
 ];
 
-export { createUserValidation, loginUserValidation, presignedUrlValidation };
+const getAndDeleteFileValidation = [
+  param("fileName")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("Enter a valid file name"),
+];
+
+export {
+  createUserValidation,
+  loginUserValidation,
+  presignedUrlValidation,
+  getAndDeleteFileValidation,
+};
