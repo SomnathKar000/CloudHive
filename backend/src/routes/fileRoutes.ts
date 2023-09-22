@@ -9,14 +9,23 @@ import {
 import {
   presignedUrlValidation,
   getAndDeleteFileValidation,
+  handleValidationErrors,
 } from "../middleware/validators";
 
 const router = express.Router();
 
 router.route("/").get(getAllFiles);
-router.route("/upload/:fileName").post(getAndDeleteFileValidation, uploadFile);
-router.route("/presigned-url").post(presignedUrlValidation, getPreSignedUrl);
-router.route("/:fileName").get(getAndDeleteFileValidation, getFile);
-router.route("/:fileName").delete(getAndDeleteFileValidation, deleteFile);
+router
+  .route("/upload/:fileName")
+  .post(getAndDeleteFileValidation, handleValidationErrors, uploadFile);
+router
+  .route("/presigned-url")
+  .post(presignedUrlValidation, handleValidationErrors, getPreSignedUrl);
+router
+  .route("/:fileName")
+  .get(getAndDeleteFileValidation, handleValidationErrors, getFile);
+router
+  .route("/:fileName")
+  .delete(getAndDeleteFileValidation, handleValidationErrors, deleteFile);
 
 export default router;

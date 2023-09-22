@@ -12,14 +12,9 @@ import {
   getAllFilesData,
 } from "../services/FileService";
 import { AuthenticatedRequest } from "../middleware/authentication";
-import { validationResult } from "express-validator";
-import { ValidationError, AppError } from "../middleware/errorHandling";
+import { AppError } from "../middleware/errorHandling";
 
 const uploadFile = async (req: AuthenticatedRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
   const fileName = req.params.fileName;
   const userId = req.user?.id;
   const filePath = createPath(userId, fileName);
@@ -33,12 +28,6 @@ const uploadFile = async (req: AuthenticatedRequest, res: Response) => {
   res.status(200).json({ success: true, message: "file uploaded" });
 };
 const getPreSignedUrl = async (req: AuthenticatedRequest, res: Response) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
-
   const { fileName, fileType } = req.body;
 
   const filePath = createPath(req.user?.id, fileName);
@@ -59,10 +48,6 @@ const getAllFiles = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 const getFile = async (req: AuthenticatedRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
   const { fileName } = req.params;
   const filePath = createPath(req.user?.id, fileName);
   const url = await generatePreSignedUrl(Method.getObject, filePath);
@@ -73,10 +58,6 @@ const getFile = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 const deleteFile = async (req: AuthenticatedRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
   const { fileName } = req.params;
   const filePath = createPath(req.user?.id, fileName);
   await deleteObject(filePath);

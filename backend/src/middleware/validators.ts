@@ -1,4 +1,7 @@
-import { body, param } from "express-validator";
+import { body, param, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from "express";
+import { ValidationError } from "../middleware/errorHandling";
+import { AuthenticatedRequest } from "./authentication";
 
 const createUserValidation = [
   body("name").trim().isLength({ min: 3 }).withMessage("Enter a valid name"),
@@ -52,10 +55,24 @@ const getAndDeleteFileValidation = [
     .withMessage("Enter a valid file name"),
 ];
 
+const handleValidationErrors = (
+  req: AuthenticatedRequest | Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    throw new ValidationError(errors.array()[0].msg);
+  }
+  next();
+};
+
 export {
   createUserValidation,
   loginUserValidation,
   presignedUrlValidation,
   getAndDeleteFileValidation,
   updateUserValidation,
+  handleValidationErrors,
 };

@@ -15,12 +15,12 @@ interface TokenData {
 }
 
 const createToken = (id: string) => {
-  const data: TokenData = {
+  const tokenData: TokenData = {
     user: {
       id,
     },
   };
-  const token = jwt.sign(data, jwtSecret);
+  const token = jwt.sign(tokenData, jwtSecret);
   return token;
 };
 
@@ -58,10 +58,31 @@ const passwordMatch = (user: User, password: string) => {
   }
 };
 
+const createUserData = async (
+  name: string,
+  email: string,
+  password: string
+): Promise<string> => {
+  const newUser = {
+    name,
+    email,
+    password: generateHashPassword(password),
+  };
+  try {
+    const { id } = await User.create(newUser);
+    const token = createToken(id);
+    return token;
+  } catch (error) {
+    console.log(error);
+    throw new AppError("Error creating user", 500);
+  }
+};
+
 export {
   createToken,
   validator,
   generateHashPassword,
   updateUserData,
   passwordMatch,
+  createUserData,
 };

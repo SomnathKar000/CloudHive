@@ -1,22 +1,15 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
-import { validationResult } from "express-validator";
-import { AppError, ValidationError } from "../middleware/errorHandling";
+import { AppError } from "../middleware/errorHandling";
 import {
   createToken,
-  generateHashPassword,
   updateUserData,
   passwordMatch,
+  createUserData,
 } from "../services/UserService";
 import { AuthenticatedRequest } from "../middleware/authentication";
 
 const createUser = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
-
   const { name, email, password } = req.body;
 
   const existingUser = await User.findOne({ where: { email } });
@@ -25,28 +18,13 @@ const createUser = async (req: Request, res: Response) => {
     throw new AppError("Email already exists", 400);
   }
 
-  const newUser = {
-    name,
-    email,
-    password: generateHashPassword(password),
-  };
-  try {
-    const { id } = await User.create(newUser);
-    const token = createToken(id);
-    res
-      .status(200)
-      .json({ success: true, message: "User created succesfully", token });
-  } catch (error) {
-    console.log(error);
-    throw new AppError("Error creating user", 500);
-  }
+  const token = await createUserData(name, email, password);
+  res
+    .status(200)
+    .json({ success: true, message: "User created succesfully", token });
 };
 
 const loginUser = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new AppError(errors.array()[0].msg, 400);
-  }
   const { email, password } = req.body;
 
   const existingUser = await User.findOne({ where: { email } });
@@ -79,10 +57,6 @@ const getUser = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 const updateUser = async (req: AuthenticatedRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError(errors.array()[0].msg);
-  }
   const { user } = req;
   const existingUser = await User.findByPk(user?.id);
   if (!existingUser) {
