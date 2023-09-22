@@ -73,7 +73,6 @@ const createUserData = async (
     const token = createToken(id);
     return token;
   } catch (error) {
-    console.log(error);
     throw new AppError("Error creating user", 500);
   }
 };

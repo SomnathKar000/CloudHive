@@ -5,7 +5,9 @@ import { User } from "./User";
 export class File extends Model {
   public id!: number;
   public fileName!: string;
-  public userId!: string;
+  public contentType!: string;
+  public starred!: boolean;
+  public readonly userId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -20,6 +22,14 @@ File.init(
     fileName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    contentType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    starred: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     userId: {
       type: DataTypes.UUID,

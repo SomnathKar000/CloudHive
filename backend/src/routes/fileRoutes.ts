@@ -16,8 +16,8 @@ const router = express.Router();
 
 router.route("/").get(getAllFiles);
 router
-  .route("/upload/:fileName")
-  .post(getAndDeleteFileValidation, handleValidationErrors, uploadFile);
+  .route("/upload")
+  .post(presignedUrlValidation, handleValidationErrors, uploadFile);
 router
   .route("/presigned-url")
   .post(presignedUrlValidation, handleValidationErrors, getPreSignedUrl);

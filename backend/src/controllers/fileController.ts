@@ -15,7 +15,8 @@ import { AuthenticatedRequest } from "../middleware/authentication";
 import { AppError } from "../middleware/errorHandling";
 
 const uploadFile = async (req: AuthenticatedRequest, res: Response) => {
-  const fileName = req.params.fileName;
+  const fileName = req.body.fileName;
+  const fileType = req.body.fileType;
   const userId = req.user?.id;
   const filePath = createPath(userId, fileName);
 
@@ -24,8 +25,10 @@ const uploadFile = async (req: AuthenticatedRequest, res: Response) => {
   if (!exists) {
     throw new AppError("File not found", 404);
   }
-  await createFileData(userId, fileName);
-  res.status(200).json({ success: true, message: "file uploaded" });
+  await createFileData(userId, fileName, fileType);
+  res
+    .status(200)
+    .json({ success: true, message: "File uploaded successfully" });
 };
 const getPreSignedUrl = async (req: AuthenticatedRequest, res: Response) => {
   const { fileName, fileType } = req.body;
@@ -37,9 +40,11 @@ const getPreSignedUrl = async (req: AuthenticatedRequest, res: Response) => {
     fileType
   );
 
-  res
-    .status(200)
-    .json({ success: true, message: "get pre signed url", s3PreSignedUrl });
+  res.status(200).json({
+    success: true,
+    message: "Generated pre-signed url successfully",
+    s3PreSignedUrl,
+  });
 };
 
 const getAllFiles = async (req: AuthenticatedRequest, res: Response) => {
@@ -51,10 +56,13 @@ const getFile = async (req: AuthenticatedRequest, res: Response) => {
   const { fileName } = req.params;
   const filePath = createPath(req.user?.id, fileName);
   const url = await generatePreSignedUrl(Method.getObject, filePath);
-  console.log(filePath);
-  res
-    .status(200)
-    .json({ success: true, message: "file fetched", url, fileName });
+
+  res.status(200).json({
+    success: true,
+    message: "File fetched successfully",
+    url,
+    fileName,
+  });
 };
 
 const deleteFile = async (req: AuthenticatedRequest, res: Response) => {
@@ -62,7 +70,7 @@ const deleteFile = async (req: AuthenticatedRequest, res: Response) => {
   const filePath = createPath(req.user?.id, fileName);
   await deleteObject(filePath);
   await deleteFileData(req.user?.id, fileName);
-  res.status(200).json({ success: true, message: "file deleted" });
+  res.status(200).json({ success: true, message: "File deleted successfully" });
 };
 
 export { uploadFile, getPreSignedUrl, getFile, getAllFiles, deleteFile };

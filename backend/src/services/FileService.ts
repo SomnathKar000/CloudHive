@@ -17,18 +17,31 @@ const deleteFileData = async (userId: string | undefined, fileName: string) => {
   await file.destroy();
 };
 
-const createFileData = async (userId: string | undefined, fileName: string) => {
+const createFileData = async (
+  userId: string | undefined,
+  fileName: string,
+  contentType: string
+) => {
   validateUserId(userId);
-  await File.create({ userId, fileName });
+  await File.create({ userId, fileName, contentType });
 };
 
 const getAllFilesData = async (userId: string | undefined) => {
   validateUserId(userId);
+
   const files = await File.findAll({
     where: { userId },
-    attributes: ["id", "fileName", "createdAt", "updatedAt"],
+    attributes: [
+      "id",
+      "fileName",
+      "contentType",
+      "starred",
+      "createdAt",
+      "updatedAt",
+    ],
     order: [["createdAt", "DESC"]],
   });
+
   return files;
 };
 

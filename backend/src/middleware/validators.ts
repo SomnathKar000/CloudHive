@@ -61,7 +61,6 @@ const handleValidationErrors = (
   next: NextFunction
 ) => {
   const errors = validationResult(req);
-  console.log(errors);
   if (!errors.isEmpty()) {
     throw new ValidationError(errors.array()[0].msg);
   }
