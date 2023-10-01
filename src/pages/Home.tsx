@@ -1,7 +1,11 @@
-// import React from "react";
-
+import UploadBox from "../components/UploadBox";
 const Home = () => {
-  return <div>Home Page</div>;
+  return (
+    <div>
+      <h3>Home Page </h3>
+      <UploadBox />
+    </div>
+  );
 };
 
 export default Home;

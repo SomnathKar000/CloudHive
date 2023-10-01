@@ -21,7 +21,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        {/* <Navbar /> */}
+        <Navbar />
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />

@@ -23,6 +23,7 @@ const SignUp = () => {
           width: 400,
           boxShadow: 24,
           p: 4,
+          mt: 3,
           gap: 3,
         }}
         onSubmit={handleSubmit}
