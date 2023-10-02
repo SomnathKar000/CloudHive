@@ -8,7 +8,8 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-
+import CloudHive from "../assets/light.png";
+import MUISwitch from "../components/MUISwitch";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -47,22 +48,9 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ backgroundColor: "#6c63ff" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-              mr: 3,
-            }}
-          >
-            CLOUD HIVE
-          </Typography>
+          <Box mr={3}>
+            <img style={{ height: "50px" }} src={CloudHive} />
+          </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -139,7 +127,7 @@ function ResponsiveAppBar() {
               </Link>
             ))}
           </Box>
-
+          <MUISwitch />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

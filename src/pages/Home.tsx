@@ -1,10 +1,17 @@
 import UploadBox from "../components/UploadBox";
+import FileList from "../components/FileList";
+import Footer from "../layout/Footer";
+import { Container } from "@mui/material";
+
 const Home = () => {
   return (
-    <div>
-      <h3>Home Page </h3>
-      <UploadBox />
-    </div>
+    <>
+      <Container>
+        <FileList />
+        <UploadBox />
+      </Container>
+      <Footer />
+    </>
   );
 };
 

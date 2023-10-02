@@ -4,7 +4,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
-import { Tooltip, Button } from "@mui/material";
+import { Tooltip, Button, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Container from "@mui/material/Container";
@@ -27,8 +27,9 @@ const UploadContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  gap: "16px",
+  gap: "20px",
 });
+
 const VisuallyHiddenInput = styled("input")({
   display: "none",
 });
@@ -38,11 +39,15 @@ export default function SpeedDialWithModal() {
   const [loading, setLoading] = React.useState(false);
   const [fileSelected, setFileSelected] = React.useState(false);
 
+  const theme = useTheme();
+
   const handleOpen = () => {
     setOpen(true);
     setFileSelected(false);
   };
+
   const handleClose = () => setOpen(false);
+
   const handleLoading = () => setLoading(true);
   const handleLoaded = () => setLoading(false);
 
@@ -64,7 +69,14 @@ export default function SpeedDialWithModal() {
 
   return (
     <Container>
-      <Box sx={{ position: "fixed", bottom: "40px", right: "40px" }}>
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: "40px",
+          right: "40px",
+          color: theme.palette.text.primary,
+        }}
+      >
         <SpeedDial
           onClick={handleOpen}
           ariaLabel="SpeedDial basic example"
@@ -77,8 +89,20 @@ export default function SpeedDialWithModal() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography variant="h6" component="h2" gutterBottom>
+        <Box
+          sx={{
+            ...style,
+            bgcolor: theme.palette.background.paper,
+          }}
+        >
+          <Typography
+            variant="h6"
+            component="h2"
+            gutterBottom
+            sx={{
+              color: theme.palette.text.primary,
+            }}
+          >
             Upload your file
           </Typography>
           <UploadContainer>

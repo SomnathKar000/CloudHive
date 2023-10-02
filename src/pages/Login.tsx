@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Box, Typography, TextField, FormControl, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import CloudHive from "../assets/light.png";
 
 const Login = () => {
   const emailRef = useRef(null);
@@ -21,14 +22,20 @@ const Login = () => {
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 4,
-          gap: 5,
+          gap: 4,
         }}
         onSubmit={handleSubmit}
         component={"form"}
       >
-        <Typography textAlign="center" gutterBottom variant="h3">
-          Coud Hive
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img style={{ height: "60px" }} src={CloudHive} />
+        </Box>
         <TextField
           inputRef={emailRef}
           type="email"
