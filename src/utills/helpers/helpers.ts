@@ -1,3 +1,7 @@
+// import {
+//   FolderZip,Description
+// } from "@mui/icons-material";
+
 const formatTime = (time: string): string => {
   try {
     const data = new Date(time);
@@ -36,4 +40,9 @@ const formatTime = (time: string): string => {
     return "Invalid Date";
   }
 };
-export { formatTime };
+
+const getFileType = (file: File): string => {
+  return file.type.split("/")[1];
+};
+
+export { formatTime, getFileType };
