@@ -1,14 +1,18 @@
 import Navbar from "./layout/Header";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Alert from "./components/Alert";
+import HomePage from "./pages/Home";
+import LoginPage from "./pages/Login";
+import SignUpPage from "./pages/SignUp";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootReducer } from "./redux/store";
 
 function App() {
+  const { mode } = useSelector((state: RootReducer) => state.theme);
   const theme = createTheme({
     palette: {
-      mode: "light",
+      mode,
     },
   });
 
@@ -17,10 +21,11 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Navbar />
+        <Alert />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

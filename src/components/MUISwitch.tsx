@@ -1,5 +1,7 @@
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import { changeTheme } from "../redux/actions/themeActions";
+import { useDispatch } from "react-redux";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -49,7 +51,8 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const MUISwitch = () => {
-  return <MaterialUISwitch />;
+  const dispatch = useDispatch();
+  return <MaterialUISwitch onClick={() => dispatch(changeTheme())} />;
 };
 
 export default MUISwitch;

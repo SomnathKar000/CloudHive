@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Container from "@mui/material/Container";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { createAlert } from "../redux/actions/alertActions";
+import { useDispatch } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -39,6 +41,7 @@ export default function SpeedDialWithModal() {
   const [loading, setLoading] = React.useState(false);
   const [fileSelected, setFileSelected] = React.useState(false);
 
+  const dispacth = useDispatch();
   const theme = useTheme();
 
   const handleOpen = () => {
@@ -55,6 +58,9 @@ export default function SpeedDialWithModal() {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       console.log("Selected file:", selectedFile);
+      dispacth(
+        createAlert({ message: "File Selected SuccessFully", type: "success" })
+      );
       setFileSelected(true);
     }
   };
@@ -64,6 +70,9 @@ export default function SpeedDialWithModal() {
     setTimeout(() => {
       handleLoaded();
       handleClose();
+      dispacth(
+        createAlert({ message: "File uploaded SuccessFully", type: "success" })
+      );
     }, 6000);
   };
 
@@ -117,6 +126,7 @@ export default function SpeedDialWithModal() {
                 loading={loading}
                 variant="contained"
                 color="primary"
+                size="large"
                 disabled={!fileSelected || loading}
               >
                 Upload
@@ -125,6 +135,7 @@ export default function SpeedDialWithModal() {
                 disabled={loading}
                 variant="contained"
                 color="error"
+                size="large"
                 onClick={handleClose}
               >
                 Close

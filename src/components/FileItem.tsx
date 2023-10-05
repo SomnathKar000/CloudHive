@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@mui/styles";
 
 import {
-  DeleteForever as Delete,
+  MoreVert,
   Image as ImageIcon,
   StarOutline,
   Star,
@@ -64,7 +64,7 @@ const FileItem: React.FC<FileItemProps> = ({
           edge="end"
           aria-label="options"
         >
-          <Delete color="error" />
+          <MoreVert />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
