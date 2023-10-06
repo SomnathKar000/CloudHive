@@ -19,7 +19,7 @@ const pages = [
   ["About", "/about"],
   ["Login", "/login"],
 ];
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Account", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -48,7 +48,7 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ backgroundColor: "#6c63ff" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box mr={3}>
+          <Box mr={3} sx={{ display: { xs: "none", md: "flex" } }}>
             <img style={{ height: "50px" }} src={CloudHive} />
           </Box>
 
@@ -94,23 +94,15 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
+          <Box
             sx={{
               flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+
               display: { xs: "flex", md: "none" },
             }}
           >
-            LOGO
-          </Typography>
+            <img style={{ height: "50px" }} src={CloudHive} />
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map(([name, to]) => (
               <Link
