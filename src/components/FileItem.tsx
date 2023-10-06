@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IconButton,
   Avatar,
@@ -7,6 +7,8 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Theme,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -46,6 +48,16 @@ const FileItem: React.FC<FileItemProps> = ({
   updatedAt,
 }) => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    console.log("handleClick", event);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <ListItem className={classes.listItem}>
@@ -63,9 +75,18 @@ const FileItem: React.FC<FileItemProps> = ({
           className={classes.iconButton}
           edge="end"
           aria-label="options"
+          onClick={handleClick}
         >
           <MoreVert />
         </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>Download</MenuItem>
+          <MenuItem onClick={handleClose}>Delete</MenuItem>
+        </Menu>
       </ListItemSecondaryAction>
     </ListItem>
   );
