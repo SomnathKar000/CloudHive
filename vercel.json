@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "vite.config.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node-serverless"
     },
     {
       "src": "backend/src/server.ts",
@@ -13,11 +13,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/src/server.ts"
+      "dest": "/api/(.*)"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/"
     }
   ]
 }
