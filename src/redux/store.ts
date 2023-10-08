@@ -4,7 +4,7 @@ import {
   applyMiddleware,
 } from "redux";
 import { alertReducer, AlertState } from "./reducers/alertReducer";
-import { themeReducer, ThemeState } from "./reducers/themeReducers";
+import { themeReducer, ThemeState } from "./reducers/themeReducer";
 import thunk from "redux-thunk";
 
 export interface RootReducer {

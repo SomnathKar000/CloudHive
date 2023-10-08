@@ -34,10 +34,18 @@ const loginUser = async (req: Request, res: Response) => {
   passwordMatch(existingUser, password);
 
   const token = createToken(existingUser.id);
-
+  const user = {
+    name: existingUser.name,
+    email: existingUser.email,
+  };
   res
     .status(200)
-    .json({ success: true, message: "User logged in succesfully", token });
+    .json({
+      success: true,
+      message: "User logged in succesfully",
+      user,
+      token,
+    });
 };
 
 const getUser = async (req: AuthenticatedRequest, res: Response) => {

@@ -2,12 +2,32 @@ import React, { useRef } from "react";
 import { Box, Typography, TextField, FormControl, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloudHive from "../assets/light.png";
+import { validate } from "email-validator";
+import { useDispatch } from "react-redux";
+import { createAlert } from "../redux/actions/alertActions";
 
 const Login = () => {
-  const emailRef = useRef(null);
-  const passwordref = useRef(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordref = useRef<HTMLInputElement | null>(null);
+  const dispatch = useDispatch();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const email = emailRef.current?.value;
+    const password = passwordref.current?.value;
+    if (email === undefined || password === undefined) {
+      dispatch(createAlert({ message: "Invalid info", type: "info" }));
+      return;
+    }
+    if (!validate(email)) {
+      dispatch(createAlert({ message: "Invalid email", type: "info" }));
+      return;
+    }
+    if (password.trim().length < 5) {
+      dispatch(createAlert({ message: "Invalid password", type: "info" }));
+      return;
+    }
+    console.log(email, password);
   };
 
   return (
