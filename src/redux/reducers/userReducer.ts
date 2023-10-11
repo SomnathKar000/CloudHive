@@ -8,14 +8,13 @@ import {
   AuthActionTypes,
 } from "../actions/userActions";
 
-interface userState {
+export interface userState {
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
   error: Error | null;
 }
-
-export const initialState: userState = {
+const initialState: userState = {
   isAuthenticated: false,
   user: null,
   token: null,

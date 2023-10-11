@@ -1,10 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Box, FormControl, Typography, TextField, Button } from "@mui/material";
 import CloudHive from "../assets/light.png";
 import { validate } from "email-validator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUserAsync } from "../redux/actions/userActions";
 import { createAlert } from "../redux/actions/alertActions";
+import { RootReducer } from "../redux/store";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -12,8 +15,10 @@ const SignUp = () => {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const confirmPasswordref = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state: RootReducer) => state.auth);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const name = nameRef.current?.value;
@@ -51,8 +56,12 @@ const SignUp = () => {
         createAlert({ message: "Passwords do not match", type: "info" })
       );
     }
-    console.log(name, email, password, confirmPassword);
+    await signupUserAsync({ name, email, password })(dispatch);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  });
 
   return (
     <Box>

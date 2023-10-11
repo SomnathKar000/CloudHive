@@ -1,15 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Box, Typography, TextField, FormControl, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloudHive from "../assets/light.png";
 import { validate } from "email-validator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createAlert } from "../redux/actions/alertActions";
+import { useNavigate } from "react-router-dom";
+import { RootReducer } from "../redux/store";
+import { loginAsync } from "../redux/actions/userActions";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordref = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state: RootReducer) => state.auth);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +32,11 @@ const Login = () => {
       dispatch(createAlert({ message: "Invalid password", type: "info" }));
       return;
     }
-    console.log(email, password);
+    loginAsync({ email, password })(dispatch);
   };
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  });
 
   return (
     <Box>

@@ -5,7 +5,7 @@ import {
   SIGNUP_API_ENDPOINT,
   GET_USER_API_ENDPOINT,
 } from "../../services/userApis";
-
+import { createAlert, AlertActions } from "./alertActions";
 export interface User {
   name: string;
   email: string;
@@ -55,16 +55,18 @@ export type AuthActionTypes =
   | SignupAction
   | LogoutAction
   | GetUserAction
-  | FailureAction;
+  | FailureAction
+  | AlertActions;
 
 export const loginAsync =
   ({ email, password }: { email: string; password: string }) =>
-  async (dispatch: Dispatch) => {
+  async (dispatch: Dispatch<AuthActionTypes>) => {
     try {
       const response = await axios.post(LOGIN_API_ENDPOINT, {
         email,
         password,
       });
+      localStorage.setItem("token", response.data?.token);
       dispatch({
         type: LOGIN,
         payload: {
@@ -87,13 +89,16 @@ export const signupUserAsync =
     email: string;
     password: string;
   }) =>
-  async (dispatch: Dispatch) => {
+  async (dispatch: Dispatch<AuthActionTypes>) => {
     try {
+      console.log(name, email, password);
       const response = await axios.post(SIGNUP_API_ENDPOINT, {
         name,
         email,
         password,
       });
+
+      localStorage.setItem("token", response.data?.token);
       dispatch({
         type: SIGNUP,
         payload: {
@@ -101,24 +106,37 @@ export const signupUserAsync =
           token: response.data?.token,
         },
       });
+      dispatch(
+        createAlert({ message: response.data?.message, type: "success" })
+      );
     } catch (error) {
-      dispatch({ type: FAILURE, payload: error });
+      dispatch({ type: FAILURE, payload: error as Error });
     }
   };
 
-export const getUserAsync = (token: string) => async (dispatch: Dispatch) => {
-  try {
-    const response = await axios.get(GET_USER_API_ENDPOINT, {
-      headers: { "auth-token": token },
-    });
-    dispatch({
-      type: GET_USER,
-      payload: {
-        user: response.data.user,
-        token,
-      },
-    });
-  } catch (error) {
-    dispatch({ type: FAILURE, payload: error });
-  }
+export const getUserAsync =
+  () => async (dispatch: Dispatch<AuthActionTypes>) => {
+    try {
+      const token = localStorage.getItem("token")!;
+      const response = await axios.get(GET_USER_API_ENDPOINT, {
+        headers: { "auth-token": token },
+      });
+
+      dispatch({
+        type: GET_USER,
+        payload: {
+          user: response.data.user,
+          token,
+        },
+      });
+      dispatch(
+        createAlert({ message: response.data?.message, type: "success" })
+      );
+    } catch (error) {
+      dispatch({ type: FAILURE, payload: error as Error });
+    }
+  };
+
+export const logOutUser = () => (dispatch: Dispatch<AuthActionTypes>) => {
+  dispatch({ type: LOGOUT });
 };
