@@ -75,6 +75,7 @@ export const loginAsync =
         },
       });
     } catch (error) {
+      console.log(error);
       dispatch({ type: FAILURE, payload: error as Error });
     }
   };
@@ -138,5 +139,6 @@ export const getUserAsync =
   };
 
 export const logOutUser = () => (dispatch: Dispatch<AuthActionTypes>) => {
+  localStorage.removeItem("token");
   dispatch({ type: LOGOUT });
 };

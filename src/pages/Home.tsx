@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) navigate("/login");
     else getUserAsync()(dispatch);
-  });
+  }, [navigate, dispatch]);
 
   return (
     <>

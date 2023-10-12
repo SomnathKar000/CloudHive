@@ -34,9 +34,11 @@ const Login = () => {
     }
     loginAsync({ email, password })(dispatch);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isAuthenticated) navigate("/");
-  });
+  }, [isAuthenticated, navigate]);
 
   return (
     <Box>

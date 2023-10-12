@@ -61,7 +61,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (isAuthenticated) navigate("/");
-  });
+  }, [isAuthenticated, navigate]);
 
   return (
     <Box>
