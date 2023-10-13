@@ -1,1 +1,1 @@
-export const host = "http://localhost:5000/api/v1";
+export const host = "https://cloud-hive-backend.vercel.app/api/v1";
