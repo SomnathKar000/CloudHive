@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Box, Typography, TextField, FormControl, Button } from "@mui/material";
+import { Box, Typography, TextField, FormControl } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloudHive from "../assets/light.png";
 import { validate } from "email-validator";
@@ -8,13 +8,17 @@ import { createAlert } from "../redux/actions/alertActions";
 import { useNavigate } from "react-router-dom";
 import { RootReducer } from "../redux/store";
 import { loginAsync } from "../redux/actions/userActions";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordref = useRef<HTMLInputElement | null>(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state: RootReducer) => state.auth);
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootReducer) => state.auth
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +39,6 @@ const Login = () => {
     loginAsync({ email, password })(dispatch);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated, navigate]);
@@ -74,8 +77,10 @@ const Login = () => {
           fullWidth
         />
         <TextField inputRef={passwordref} required label="Password" fullWidth />
-        <Button
+        <LoadingButton
+          loading={loading}
           type="submit"
+          size="large"
           variant="contained"
           sx={{
             backgroundColor: "#6c63ff",
@@ -83,7 +88,7 @@ const Login = () => {
           }}
         >
           Submit
-        </Button>
+        </LoadingButton>
         <Typography textAlign="center" variant="subtitle1" gutterBottom>
           DON'T HAVE AN ACCOUNT?{" "}
           <Link

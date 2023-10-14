@@ -3,7 +3,8 @@ import {
   LOGOUT,
   GET_USER,
   SIGNUP,
-  FAILURE,
+  START_LOADING,
+  STOP_LOADING,
   User,
   AuthActionTypes,
 } from "../actions/userActions";
@@ -12,13 +13,13 @@ export interface userState {
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  error: Error | null;
+  loading: boolean;
 }
 const initialState: userState = {
   isAuthenticated: false,
   user: null,
   token: null,
-  error: null,
+  loading: false,
 };
 
 export const userReducer = (state = initialState, action: AuthActionTypes) => {
@@ -31,20 +32,20 @@ export const userReducer = (state = initialState, action: AuthActionTypes) => {
         isAuthenticated: true,
         user: action.payload.user,
         token: action.payload.token,
+        loading: false,
       };
+    case START_LOADING:
+      return { ...state, loading: true };
+    case STOP_LOADING:
+      return { ...state, loading: false };
     case LOGOUT:
       return {
         isAuthenticated: false,
         user: null,
         token: null,
+        loading: false,
       };
-    case FAILURE:
-      return {
-        isAuthenticated: false,
-        user: null,
-        token: null,
-        error: action.payload,
-      };
+
     default:
       return state;
   }

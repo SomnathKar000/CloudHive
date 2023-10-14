@@ -12,8 +12,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) navigate("/login");
-    else getUserAsync()(dispatch);
+    if (localStorage.getItem("token")) getUserAsync()(dispatch);
+    else navigate("/login");
   }, [navigate, dispatch]);
 
   return (

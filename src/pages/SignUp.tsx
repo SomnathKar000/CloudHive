@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Box, FormControl, Typography, TextField, Button } from "@mui/material";
+import { Box, FormControl, Typography, TextField } from "@mui/material";
 import CloudHive from "../assets/light.png";
 import { validate } from "email-validator";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { signupUserAsync } from "../redux/actions/userActions";
 import { createAlert } from "../redux/actions/alertActions";
 import { RootReducer } from "../redux/store";
 import { useNavigate } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const SignUp = () => {
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -16,7 +17,9 @@ const SignUp = () => {
   const confirmPasswordref = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state: RootReducer) => state.auth);
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootReducer) => state.auth
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,16 +102,18 @@ const SignUp = () => {
           required
           inputRef={confirmPasswordref}
         />
-        <Button
+        <LoadingButton
           variant="contained"
           type="submit"
+          loading={loading}
+          size="large"
           sx={{
             backgroundColor: "#6c63ff",
             "&:hover": { backgroundColor: "#5a50d3" },
           }}
         >
           Submit
-        </Button>
+        </LoadingButton>
         <Typography textAlign="center" variant="subtitle1" gutterBottom>
           ALREADY HAVE AN ACOUNT{" "}
           <Link

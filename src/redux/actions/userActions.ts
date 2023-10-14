@@ -15,7 +15,16 @@ export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
 export const LOGOUT = "LOGOUT";
 export const GET_USER = "GET_USER";
-export const FAILURE = "FAILURE";
+export const START_LOADING = "START_LOADING";
+export const STOP_LOADING = "STOP_LOADING";
+
+interface StartLoading {
+  type: typeof START_LOADING;
+}
+
+interface StopLoading {
+  type: typeof STOP_LOADING;
+}
 
 interface LoginAction {
   type: typeof LOGIN;
@@ -45,22 +54,19 @@ interface GetUserAction {
   };
 }
 
-interface FailureAction {
-  type: typeof FAILURE;
-  payload: Error;
-}
-
 export type AuthActionTypes =
   | LoginAction
   | SignupAction
   | LogoutAction
   | GetUserAction
-  | FailureAction
+  | StartLoading
+  | StopLoading
   | AlertActions;
 
 export const loginAsync =
   ({ email, password }: { email: string; password: string }) =>
   async (dispatch: Dispatch<AuthActionTypes>) => {
+    dispatch({ type: START_LOADING });
     try {
       const response = await axios.post(LOGIN_API_ENDPOINT, {
         email,
@@ -74,9 +80,14 @@ export const loginAsync =
           token: response.data?.token,
         },
       });
+      dispatch(
+        createAlert({ message: response.data?.message, type: "success" })
+      );
     } catch (error) {
+      dispatch({ type: STOP_LOADING });
       console.log(error);
-      dispatch({ type: FAILURE, payload: error as Error });
+      const errorMessage = error.response?.data.message || "An error occurred.";
+      dispatch(createAlert({ message: errorMessage, type: "error" }));
     }
   };
 
@@ -91,6 +102,7 @@ export const signupUserAsync =
     password: string;
   }) =>
   async (dispatch: Dispatch<AuthActionTypes>) => {
+    dispatch({ type: START_LOADING });
     try {
       console.log(name, email, password);
       const response = await axios.post(SIGNUP_API_ENDPOINT, {
@@ -111,12 +123,16 @@ export const signupUserAsync =
         createAlert({ message: response.data?.message, type: "success" })
       );
     } catch (error) {
-      dispatch({ type: FAILURE, payload: error as Error });
+      dispatch({ type: STOP_LOADING });
+      console.log(error);
+      const errorMessage = error?.response.data.message || "An error occurred.";
+      dispatch(createAlert({ message: errorMessage, type: "error" }));
     }
   };
 
 export const getUserAsync =
   () => async (dispatch: Dispatch<AuthActionTypes>) => {
+    dispatch({ type: START_LOADING });
     try {
       const token = localStorage.getItem("token")!;
       const response = await axios.get(GET_USER_API_ENDPOINT, {
@@ -134,11 +150,18 @@ export const getUserAsync =
         createAlert({ message: response.data?.message, type: "success" })
       );
     } catch (error) {
-      dispatch({ type: FAILURE, payload: error as Error });
+      dispatch({ type: STOP_LOADING });
+      localStorage.removeItem("token");
+      console.log(error);
+      const errorMessage = error?.response.data.message || "An error occurred.";
+      dispatch(createAlert({ message: errorMessage, type: "error" }));
     }
   };
 
 export const logOutUser = () => (dispatch: Dispatch<AuthActionTypes>) => {
   localStorage.removeItem("token");
   dispatch({ type: LOGOUT });
+  dispatch(
+    createAlert({ message: "Logged out successfully", type: "success" })
+  );
 };
