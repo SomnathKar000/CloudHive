@@ -6,11 +6,10 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
-  Theme,
   Menu,
   MenuItem,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/system";
 
 import {
   MoreVert,
@@ -19,19 +18,19 @@ import {
   Star,
 } from "@mui/icons-material";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  listItem: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-    },
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  "&:hover": {
+    backgroundColor: theme.palette.action.hover,
   },
-  avatar: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  iconButton: {
-    color: theme.palette.text.secondary,
-  },
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.text.secondary,
 }));
 
 interface FileItemProps {
@@ -47,12 +46,10 @@ const FileItem: React.FC<FileItemProps> = ({
   starred,
   updatedAt,
 }) => {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log("handleClick", event);
   };
 
   const handleClose = () => {
@@ -60,25 +57,20 @@ const FileItem: React.FC<FileItemProps> = ({
   };
 
   return (
-    <ListItem className={classes.listItem}>
+    <StyledListItem>
       <ListItemAvatar>
-        <Avatar className={classes.avatar}>
+        <StyledAvatar>
           <ImageIcon />
-        </Avatar>
+        </StyledAvatar>
       </ListItemAvatar>
       <ListItemText primary={fileName} secondary={updatedAt} />
       <ListItemSecondaryAction>
-        <IconButton className={classes.iconButton}>
+        <StyledIconButton>
           {starred ? <Star /> : <StarOutline />}
-        </IconButton>
-        <IconButton
-          className={classes.iconButton}
-          edge="end"
-          aria-label="options"
-          onClick={handleClick}
-        >
+        </StyledIconButton>
+        <StyledIconButton edge="end" aria-label="options" onClick={handleClick}>
           <MoreVert />
-        </IconButton>
+        </StyledIconButton>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -88,7 +80,7 @@ const FileItem: React.FC<FileItemProps> = ({
           <MenuItem onClick={handleClose}>Delete</MenuItem>
         </Menu>
       </ListItemSecondaryAction>
-    </ListItem>
+    </StyledListItem>
   );
 };
 

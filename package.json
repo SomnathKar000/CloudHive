@@ -17,7 +17,6 @@
     "@mui/icons-material": "^5.14.11",
     "@mui/lab": "^5.0.0-alpha.146",
     "@mui/material": "^5.14.11",
-    "@mui/styles": "^5.14.11",
     "@reduxjs/toolkit": "^1.9.6",
     "axios": "^1.5.1",
     "email-validator": "^2.0.4",
