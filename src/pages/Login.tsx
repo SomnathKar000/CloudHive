@@ -16,9 +16,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useSelector(
-    (state: RootReducer) => state.auth
-  );
+  const { loading } = useSelector((state: RootReducer) => state.auth);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,8 +38,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated, navigate]);
+    if (localStorage.getItem("token")) navigate("/");
+  }, [dispatch, navigate]);
 
   return (
     <Box>
