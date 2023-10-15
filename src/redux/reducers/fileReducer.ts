@@ -4,18 +4,26 @@ import {
   GET_ALL_FILES,
   UPLOAD_FILE,
   DELETE_FILE,
-  START_LOADING,
-  STOP_LOADING,
+  START_GET_FILE_LOADING,
+  STOP_GET_FILE_LOADING,
+  START_UPLOAD_FILE_LOADING,
+  STOP_UPLOAD_FILE_LOADING,
 } from "../actions/fileActions";
 
 export interface FileState {
   files: File[];
-  loading: boolean;
+  loading: {
+    GET_ALL_FILES: boolean;
+    UPLOAD_FILE: boolean;
+  };
 }
 
 const initialState: FileState = {
   files: [],
-  loading: false,
+  loading: {
+    GET_ALL_FILES: false,
+    UPLOAD_FILE: false,
+  },
 };
 
 export const fileReducer = (
@@ -24,7 +32,7 @@ export const fileReducer = (
 ) => {
   switch (action.type) {
     case GET_ALL_FILES:
-      return { ...state, files: action.payload.files, loading: false };
+      return { ...state, files: action.payload.files };
 
     case UPLOAD_FILE:
       return {
@@ -42,10 +50,14 @@ export const fileReducer = (
         ),
       };
 
-    case START_LOADING:
-      return { ...state, loading: true };
-    case STOP_LOADING:
-      return { ...state, loading: false };
+    case START_GET_FILE_LOADING:
+      return { ...state, loading: { ...state.loading, GET_ALL_FILES: true } };
+    case STOP_GET_FILE_LOADING:
+      return { ...state, loading: { ...state.loading, GET_ALL_FILES: false } };
+    case START_UPLOAD_FILE_LOADING:
+      return { ...state, loading: { ...state.loading, UPLOAD_FILE: true } };
+    case STOP_UPLOAD_FILE_LOADING:
+      return { ...state, loading: { ...state.loading, UPLOAD_FILE: false } };
     default:
       return state;
   }

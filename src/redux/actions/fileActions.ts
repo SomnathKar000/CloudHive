@@ -13,8 +13,10 @@ import {
 export const GET_ALL_FILES = "GET_ALL_FILES";
 export const UPLOAD_FILE = "UPLOAD_FILE";
 export const DELETE_FILE = "DELETE_FILE";
-export const START_LOADING = "START_LOADING";
-export const STOP_LOADING = "STOP_LOADING";
+export const START_GET_FILE_LOADING = "START_GET_FILE_LOADING";
+export const STOP_GET_FILE_LOADING = "STOP_GET_FILE_LOADING";
+export const START_UPLOAD_FILE_LOADING = "START_UPLOAD_FILE_LOADING";
+export const STOP_UPLOAD_FILE_LOADING = "STOP_UPLOAD_FILE_LOADING";
 
 export interface File {
   id: number;
@@ -44,23 +46,32 @@ interface DeleteFile {
   };
 }
 
-interface StartLoading {
-  type: typeof START_LOADING;
+interface StartGetFileLoading {
+  type: typeof START_GET_FILE_LOADING;
 }
-interface StopLoading {
-  type: typeof STOP_LOADING;
+interface StopGetFileLoading {
+  type: typeof STOP_GET_FILE_LOADING;
+}
+
+interface StartUploadFileLoading {
+  type: typeof START_UPLOAD_FILE_LOADING;
+}
+interface StopUploadFileLoading {
+  type: typeof STOP_UPLOAD_FILE_LOADING;
 }
 
 export type FileActionTypes =
   | GetAllFiles
   | UploadFile
   | DeleteFile
-  | StartLoading
-  | StopLoading
+  | StartGetFileLoading
+  | StopGetFileLoading
+  | StartUploadFileLoading
+  | StopUploadFileLoading
   | AlertActions;
 
 export const getAllFiles = () => async (dispatch: Dispatch) => {
-  dispatch({ type: START_LOADING });
+  dispatch({ type: START_GET_FILE_LOADING });
   const token = localStorage.getItem("token");
   if (!token) return;
   try {
@@ -72,19 +83,20 @@ export const getAllFiles = () => async (dispatch: Dispatch) => {
     dispatch(
       createAlert({ message: "Files fetched successfully", type: "success" })
     );
+    dispatch({ type: STOP_GET_FILE_LOADING });
   } catch (error) {
     console.log(error);
     const errorMessage =
       error.response.data.message || "An error occurred while fetching files";
     dispatch(createAlert({ message: errorMessage, type: "error" }));
-    dispatch({ type: STOP_LOADING });
+    dispatch({ type: STOP_GET_FILE_LOADING });
   }
 };
 
 export const uploadFile =
   (fileName: string, fileType: string, file: object) =>
   async (dispatch: Dispatch) => {
-    dispatch({ type: START_LOADING });
+    dispatch({ type: START_UPLOAD_FILE_LOADING });
     const token = localStorage.getItem("token");
     if (!token || !fileName || !fileType || !file) return;
     try {
@@ -118,13 +130,12 @@ export const uploadFile =
       const errorMessage =
         error.response.data.message || "Error while uploading file";
       dispatch(createAlert({ message: errorMessage, type: "error" }));
-      dispatch({ type: STOP_LOADING });
+      dispatch({ type: STOP_UPLOAD_FILE_LOADING });
     }
   };
 
 export const downloadFile =
   (fileName: string) => async (dispatch: Dispatch) => {
-    dispatch({ type: START_LOADING });
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
@@ -143,7 +154,6 @@ export const downloadFile =
       const errorMessage =
         error.response.data.message || "Error while downloading file";
       dispatch(createAlert({ message: errorMessage, type: "error" }));
-      dispatch({ type: STOP_LOADING });
     }
   };
 

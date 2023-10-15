@@ -42,7 +42,9 @@ export default function SpeedDialWithModal() {
   const [open, setOpen] = React.useState(false);
   const [fileSelected, setFileSelected] = React.useState(false);
   const [file, setFile] = React.useState({} as File);
-  const { loading } = useSelector((state: RootReducer) => state.file);
+  const loading = useSelector(
+    (state: RootReducer) => state.file.loading.UPLOAD_FILE
+  );
   const dispatch = useDispatch();
   const theme = useTheme();
 

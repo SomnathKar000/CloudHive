@@ -3,9 +3,16 @@ import { Typography, Grid, List } from "@mui/material";
 import { useSelector } from "react-redux";
 import { formatTime } from "../utills/helpers/helpers";
 import { RootReducer } from "../redux/store";
+import Skeleton from "./Skeleton";
 
 const FileList = () => {
-  const Files = useSelector((state: RootReducer) => state.file.files);
+  const {
+    files,
+    loading: { GET_ALL_FILES },
+  } = useSelector((state: RootReducer) => state.file);
+  if (GET_ALL_FILES) {
+    return <Skeleton />;
+  }
   return (
     <Grid item xs={12} md={6} mb={6}>
       <Typography
@@ -14,7 +21,7 @@ const FileList = () => {
         component="div"
       ></Typography>
       <List>
-        {Files.map(({ id, fileName, contentType, starred, updatedAt }) => (
+        {files.map(({ id, fileName, contentType, starred, updatedAt }) => (
           <FileItem
             key={id}
             id={id}
