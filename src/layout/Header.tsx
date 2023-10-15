@@ -19,9 +19,7 @@ import { logOutUser } from "../redux/actions/userActions";
 const pages = [
   ["Home", "/"],
   ["About", "/about"],
-  ["Login", "/login"],
 ];
-// const settings = ["Account", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

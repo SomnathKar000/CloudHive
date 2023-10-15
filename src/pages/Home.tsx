@@ -6,6 +6,7 @@ import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getUserAsync } from "../redux/actions/userActions";
+import { getAllFiles } from "../redux/actions/fileActions";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,10 @@ const Home = () => {
 
   useEffect(() => {
     if (!localStorage.getItem("token")) navigate("/login");
-    else getUserAsync()(dispatch);
+    else {
+      getUserAsync()(dispatch);
+      getAllFiles()(dispatch);
+    }
   }, [navigate, dispatch]);
 
   return (

@@ -1,9 +1,11 @@
 import FileItem from "./FileItem";
 import { Typography, Grid, List } from "@mui/material";
-import { Files } from "../utills/helpers/arrays";
+import { useSelector } from "react-redux";
 import { formatTime } from "../utills/helpers/helpers";
+import { RootReducer } from "../redux/store";
 
 const FileList = () => {
+  const Files = useSelector((state: RootReducer) => state.file.files);
   return (
     <Grid item xs={12} md={6} mb={6}>
       <Typography

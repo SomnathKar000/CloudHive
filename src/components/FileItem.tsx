@@ -10,6 +10,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import { useDispatch } from "react-redux";
+import { deleteFile, downloadFile } from "../redux/actions/fileActions";
 
 import {
   MoreVert,
@@ -47,7 +49,7 @@ const FileItem: React.FC<FileItemProps> = ({
   updatedAt,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+  const dispatch = useDispatch();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,7 +57,14 @@ const FileItem: React.FC<FileItemProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const downloadHandler = () => {
+    downloadFile(fileName)(dispatch);
+    handleClose();
+  };
+  const deleteFileHandler = () => {
+    deleteFile(fileName)(dispatch);
+    handleClose();
+  };
   return (
     <StyledListItem>
       <ListItemAvatar>
@@ -76,8 +85,8 @@ const FileItem: React.FC<FileItemProps> = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Download</MenuItem>
-          <MenuItem onClick={handleClose}>Delete</MenuItem>
+          <MenuItem onClick={downloadHandler}>Download</MenuItem>
+          <MenuItem onClick={deleteFileHandler}>Delete</MenuItem>
         </Menu>
       </ListItemSecondaryAction>
     </StyledListItem>

@@ -11,6 +11,7 @@ const Footer: React.FC = () => {
         padding: "1rem",
         bottom: 0,
         width: "100%",
+        position: "fixed",
       }}
     >
       <Typography variant="body2">

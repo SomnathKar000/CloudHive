@@ -9,8 +9,10 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Container from "@mui/material/Container";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadFile } from "../redux/actions/fileActions";
 import { createAlert } from "../redux/actions/alertActions";
-import { useDispatch } from "react-redux";
+import { RootReducer } from "../redux/store";
 
 const style = {
   position: "absolute",
@@ -38,10 +40,10 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function SpeedDialWithModal() {
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
   const [fileSelected, setFileSelected] = React.useState(false);
-
-  const dispacth = useDispatch();
+  const [file, setFile] = React.useState({} as File);
+  const { loading } = useSelector((state: RootReducer) => state.file);
+  const dispatch = useDispatch();
   const theme = useTheme();
 
   const handleOpen = () => {
@@ -51,14 +53,11 @@ export default function SpeedDialWithModal() {
 
   const handleClose = () => setOpen(false);
 
-  const handleLoading = () => setLoading(true);
-  const handleLoaded = () => setLoading(false);
-
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      console.log("Selected file:", selectedFile);
-      dispacth(
+      setFile(selectedFile);
+      dispatch(
         createAlert({ message: "File Selected SuccessFully", type: "success" })
       );
       setFileSelected(true);
@@ -66,14 +65,7 @@ export default function SpeedDialWithModal() {
   };
 
   const handleFileUpload = () => {
-    handleLoading();
-    setTimeout(() => {
-      handleLoaded();
-      handleClose();
-      dispacth(
-        createAlert({ message: "File uploaded SuccessFully", type: "success" })
-      );
-    }, 6000);
+    uploadFile(file.name, file.type, file)(dispatch);
   };
 
   return (
@@ -81,7 +73,7 @@ export default function SpeedDialWithModal() {
       <Box
         sx={{
           position: "fixed",
-          bottom: "40px",
+          bottom: "80px",
           right: "40px",
           color: theme.palette.text.primary,
         }}
