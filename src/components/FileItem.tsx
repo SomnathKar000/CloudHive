@@ -12,13 +12,8 @@ import {
 import { styled } from "@mui/system";
 import { useDispatch } from "react-redux";
 import { deleteFile, downloadFile } from "../redux/actions/fileActions";
-
-import {
-  MoreVert,
-  Image as ImageIcon,
-  StarOutline,
-  Star,
-} from "@mui/icons-material";
+import Filetype from "./Filetype";
+import { MoreVert, StarOutline, Star } from "@mui/icons-material";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
@@ -69,7 +64,7 @@ const FileItem: React.FC<FileItemProps> = ({
     <StyledListItem>
       <ListItemAvatar>
         <StyledAvatar>
-          <ImageIcon />
+          <Filetype fileName={fileName} />
         </StyledAvatar>
       </ListItemAvatar>
       <ListItemText primary={fileName} secondary={updatedAt} />

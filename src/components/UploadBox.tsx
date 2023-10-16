@@ -75,8 +75,8 @@ export default function SpeedDialWithModal() {
       <Box
         sx={{
           position: "fixed",
-          bottom: "80px",
-          right: "40px",
+          bottom: "50px",
+          right: "50px",
           color: theme.palette.text.primary,
         }}
       >
