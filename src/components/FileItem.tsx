@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useDispatch } from "react-redux";
-import { deleteFile, downloadFile } from "../redux/actions/fileActions";
+import {
+  deleteFile,
+  downloadFile,
+  toggleStarredFile,
+} from "../redux/actions/fileActions";
 import Filetype from "./Filetype";
 import { MoreVert, StarOutline, Star } from "@mui/icons-material";
 
@@ -60,6 +64,9 @@ const FileItem: React.FC<FileItemProps> = ({
     deleteFile(fileName)(dispatch);
     handleClose();
   };
+  const toggleStar = () => {
+    toggleStarredFile(fileName, starred)(dispatch);
+  };
   return (
     <StyledListItem>
       <ListItemAvatar>
@@ -69,7 +76,7 @@ const FileItem: React.FC<FileItemProps> = ({
       </ListItemAvatar>
       <ListItemText primary={fileName} secondary={updatedAt} />
       <ListItemSecondaryAction>
-        <StyledIconButton>
+        <StyledIconButton onClick={toggleStar}>
           {starred ? <Star /> : <StarOutline />}
         </StyledIconButton>
         <StyledIconButton edge="end" aria-label="options" onClick={handleClick}>

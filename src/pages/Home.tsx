@@ -18,7 +18,7 @@ const Home = () => {
       getUserAsync()(dispatch);
       getAllFiles()(dispatch);
     }
-  }, [navigate, dispatch]);
+  }, [dispatch]);
 
   return (
     <>

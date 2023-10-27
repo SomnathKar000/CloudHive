@@ -1,7 +1,7 @@
 # CloudHive - Frontend
 
 [![CloudHive](https://img.shields.io/badge/CloudHive-Frontend-brightgreen)](https://github.com/SomnathKar000/CloudHive)
-[![Backend Repo](https://img.shields.io/badge/Backend%20Repo-CloudHive%20Backend-blue)](https://github.com/your-username/CloudHive-Backend)
+[![Backend Repo](https://img.shields.io/badge/Backend%20Repo-CloudHive%20Backend-blue)](https://github.com/SomnathKar000/CloudHive-Backend)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Cloud%20Hive-9cf)](https://cloud-hive.vercel.app/)
 
 CloudHive is a web application that allows users to securely upload and manage files in the cloud. This repository contains the frontend code for the CloudHive project. It is built using React, Material-UI, Redux with Redux Thunk for state management, and Axios for API calls. The project is built with Vite for fast and efficient development.

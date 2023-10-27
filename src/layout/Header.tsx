@@ -16,10 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logOutUser } from "../redux/actions/userActions";
 
-const pages = [
-  ["Home", "/"],
-  ["About", "/about"],
-];
+const pages = [["Home", "/"]];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -49,7 +46,10 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const navigateToAccountPage = () => {
+    navigate("/account");
+    handleCloseUserMenu();
+  };
   return (
     <AppBar position="static" sx={{ backgroundColor: "#6c63ff" }}>
       <Container maxWidth="xl">
@@ -148,7 +148,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key="Account" onClick={handleLogout}>
+              <MenuItem key="Account" onClick={navigateToAccountPage}>
                 <Typography textAlign="center">Account</Typography>
               </MenuItem>
               <MenuItem key="Logout" onClick={handleLogout}>

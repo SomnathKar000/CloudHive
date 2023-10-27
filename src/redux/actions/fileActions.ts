@@ -8,6 +8,7 @@ import {
   UPLOAD_FILE_API_ENDPOINT,
   DOWNLOAD_FILE_API_ENDPOINT,
   DELETE_FILE_API_ENDPOINT,
+  TOGGLE_STARRED_FILE_API_ENDPOINT,
 } from "../../services/fileApis";
 
 export const GET_ALL_FILES = "GET_ALL_FILES";
@@ -17,6 +18,7 @@ export const START_GET_FILE_LOADING = "START_GET_FILE_LOADING";
 export const STOP_GET_FILE_LOADING = "STOP_GET_FILE_LOADING";
 export const START_UPLOAD_FILE_LOADING = "START_UPLOAD_FILE_LOADING";
 export const STOP_UPLOAD_FILE_LOADING = "STOP_UPLOAD_FILE_LOADING";
+export const TOGGLE_STARRED_FILE = "TOGGLE_STARRED_FILE";
 
 export interface File {
   id: number;
@@ -46,6 +48,14 @@ interface DeleteFile {
   };
 }
 
+interface ToggleStarredFile {
+  type: typeof TOGGLE_STARRED_FILE;
+  payload: {
+    fileName: string;
+    starred: boolean;
+  };
+}
+
 interface StartGetFileLoading {
   type: typeof START_GET_FILE_LOADING;
 }
@@ -68,7 +78,8 @@ export type FileActionTypes =
   | StopGetFileLoading
   | StartUploadFileLoading
   | StopUploadFileLoading
-  | AlertActions;
+  | AlertActions
+  | ToggleStarredFile;
 
 export const getAllFiles = () => async (dispatch: Dispatch) => {
   dispatch({ type: START_GET_FILE_LOADING });
@@ -175,3 +186,32 @@ export const deleteFile = (fileName: string) => async (dispatch: Dispatch) => {
     dispatch(createAlert({ message: errorMessage, type: "error" }));
   }
 };
+
+export const toggleStarredFile =
+  (fileName: string, star: boolean) => async (dispatch: Dispatch) => {
+    const token = localStorage.getItem("token");
+    if (!token || !fileName) return;
+    try {
+      await axios.put(
+        `${TOGGLE_STARRED_FILE_API_ENDPOINT}/${fileName}`,
+        {},
+        {
+          headers: { "auth-token": token },
+        }
+      );
+      star = !star;
+      dispatch({
+        type: TOGGLE_STARRED_FILE,
+        payload: { fileName, starred: star },
+      });
+      const message = star
+        ? "File starred successfully"
+        : "File unstarred successfully";
+      dispatch(createAlert({ message, type: "success" }));
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response.data.message || "Error while toggling starred file";
+      dispatch(createAlert({ message: errorMessage, type: "error" }));
+    }
+  };

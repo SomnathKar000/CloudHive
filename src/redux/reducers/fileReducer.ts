@@ -8,6 +8,7 @@ import {
   STOP_GET_FILE_LOADING,
   START_UPLOAD_FILE_LOADING,
   STOP_UPLOAD_FILE_LOADING,
+  TOGGLE_STARRED_FILE,
 } from "../actions/fileActions";
 
 export interface FileState {
@@ -48,6 +49,16 @@ export const fileReducer = (
         files: state.files.filter(
           (file) => file.fileName !== action.payload.fileName
         ),
+      };
+
+    case TOGGLE_STARRED_FILE:
+      return {
+        ...state,
+        files: state.files.map((file) => {
+          if (file.fileName === action.payload.fileName)
+            file.starred = action.payload.starred;
+          return file;
+        }),
       };
 
     case START_GET_FILE_LOADING:
