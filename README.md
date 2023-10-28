@@ -39,7 +39,7 @@ Follow these steps to set up the CloudHive frontend locally:
 
 4. **Start the Development Server:**
    ```shell
-   npm start
+   npm run dev
    ```
 
 Your frontend development server should now be running at `http://localhost:3000`.

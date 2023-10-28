@@ -15,7 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logOutUser } from "../redux/actions/userActions";
-
+import { getUserAsync } from "../redux/actions/userActions";
+import { getAllFiles } from "../redux/actions/fileActions";
+import { useEffect } from "react";
 const pages = [["Home", "/"]];
 
 function ResponsiveAppBar() {
@@ -50,6 +52,15 @@ function ResponsiveAppBar() {
     navigate("/account");
     handleCloseUserMenu();
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) navigate("/login");
+    else {
+      getUserAsync()(dispatch);
+      getAllFiles()(dispatch);
+    }
+  }, [navigate, dispatch]);
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "#6c63ff" }}>
       <Container maxWidth="xl">
