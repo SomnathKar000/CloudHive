@@ -19,6 +19,7 @@ export const STOP_GET_FILE_LOADING = "STOP_GET_FILE_LOADING";
 export const START_UPLOAD_FILE_LOADING = "START_UPLOAD_FILE_LOADING";
 export const STOP_UPLOAD_FILE_LOADING = "STOP_UPLOAD_FILE_LOADING";
 export const TOGGLE_STARRED_FILE = "TOGGLE_STARRED_FILE";
+export const REMOVE_ALL_FILE_DATA = "REMOVE_ALL_FILE_DATA";
 
 export interface File {
   id: number;
@@ -56,6 +57,10 @@ interface ToggleStarredFile {
   };
 }
 
+interface RemoveAllFileData {
+  type: typeof REMOVE_ALL_FILE_DATA;
+}
+
 interface StartGetFileLoading {
   type: typeof START_GET_FILE_LOADING;
 }
@@ -79,7 +84,8 @@ export type FileActionTypes =
   | StartUploadFileLoading
   | StopUploadFileLoading
   | AlertActions
-  | ToggleStarredFile;
+  | ToggleStarredFile
+  | RemoveAllFileData;
 
 export const getAllFiles = () => async (dispatch: Dispatch) => {
   dispatch({ type: START_GET_FILE_LOADING });
@@ -215,3 +221,7 @@ export const toggleStarredFile =
       dispatch(createAlert({ message: errorMessage, type: "error" }));
     }
   };
+
+export const removeAllFileData = () => ({
+  type: REMOVE_ALL_FILE_DATA,
+});

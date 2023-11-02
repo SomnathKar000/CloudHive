@@ -9,6 +9,7 @@ import {
   START_UPLOAD_FILE_LOADING,
   STOP_UPLOAD_FILE_LOADING,
   TOGGLE_STARRED_FILE,
+  REMOVE_ALL_FILE_DATA,
 } from "../actions/fileActions";
 
 export interface FileState {
@@ -60,7 +61,11 @@ export const fileReducer = (
           return file;
         }),
       };
-
+    case REMOVE_ALL_FILE_DATA:
+      return {
+        ...state,
+        file: [],
+      };
     case START_GET_FILE_LOADING:
       return { ...state, loading: { ...state.loading, GET_ALL_FILES: true } };
     case STOP_GET_FILE_LOADING:

@@ -5,6 +5,7 @@ import {
   SIGNUP_API_ENDPOINT,
   GET_USER_API_ENDPOINT,
 } from "../../services/userApis";
+import { getAllFiles } from "../actions/fileActions";
 import { createAlert, AlertActions } from "./alertActions";
 export interface User {
   name: string;
@@ -83,6 +84,7 @@ export const loginAsync =
       dispatch(
         createAlert({ message: response.data?.message, type: "success" })
       );
+      getAllFiles()(dispatch);
     } catch (error) {
       dispatch({ type: STOP_LOADING });
       console.log(error);

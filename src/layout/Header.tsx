@@ -13,7 +13,9 @@ import MUISwitch from "../components/MUISwitch";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootReducer } from "../redux/store";
+import { removeAllFileData } from "../redux/actions/fileActions";
 import { logOutUser } from "../redux/actions/userActions";
 import { getUserAsync } from "../redux/actions/userActions";
 import { getAllFiles } from "../redux/actions/fileActions";
@@ -27,10 +29,12 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const { isAuthenticated } = useSelector((state: RootReducer) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
     logOutUser()(dispatch);
+    dispatch(removeAllFileData());
     handleCloseUserMenu();
     navigate("/login");
   };
@@ -55,11 +59,11 @@ function ResponsiveAppBar() {
 
   useEffect(() => {
     if (!localStorage.getItem("token")) navigate("/login");
-    else {
+    else if (!isAuthenticated) {
       getUserAsync()(dispatch);
       getAllFiles()(dispatch);
     }
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, isAuthenticated]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#6c63ff" }}>
