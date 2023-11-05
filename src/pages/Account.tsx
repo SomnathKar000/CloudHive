@@ -1,3 +1,4 @@
+import { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -14,8 +15,12 @@ import { Paper, Box, Tooltip, IconButton } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootReducer } from "../redux/store";
 import { yellow, green, blue } from "@mui/material/colors";
+import AccountModel from "../components/AccountModel";
 
 export default function InsetDividers() {
+  const [open, setOpen] = useState<boolean>(false);
+  const [type, setType] = useState<string>("");
+
   const { user, loading } = useSelector((state: RootReducer) => state.auth);
   if (loading) {
     return (
@@ -24,58 +29,68 @@ export default function InsetDividers() {
       </Box>
     );
   }
+
   const name = user?.name;
   const email = user?.email;
-  return (
-    <Paper
-      sx={{ marginX: { xs: "10%", sm: "20%", md: "30%" }, marginY: "10%" }}
-    >
-      <Box>
-        <List
-          sx={{
-            bgcolor: "background.paper",
-          }}
-        >
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[500] }} variant="rounded">
-                <AccessibilityNewIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Name" secondary={name} />
+  const handleClose = () => setOpen(false);
+  const handleOpen = (update: string) => {
+    setType(update);
+    setOpen(true);
+  };
 
-            <Tooltip title="Edit">
-              <IconButton>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: yellow[500] }} variant="rounded">
-                <EmailIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Email" secondary={email} />
-            <LockIcon />
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: green[500] }} variant="rounded">
-                <PasswordIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Password" secondary="******" />
-            <Tooltip title="Edit">
-              <IconButton>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </ListItem>
-        </List>
-      </Box>
-    </Paper>
+  return (
+    <Box>
+      <Paper
+        sx={{ marginX: { xs: "10%", sm: "20%", md: "30%" }, marginY: "10%" }}
+      >
+        <Box>
+          <List
+            sx={{
+              bgcolor: "background.paper",
+            }}
+          >
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar sx={{ bgcolor: blue[500] }} variant="rounded">
+                  <AccessibilityNewIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Name" secondary={name} />
+
+              <Tooltip title="Edit">
+                <IconButton onClick={() => handleOpen("Name")}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar sx={{ bgcolor: yellow[500] }} variant="rounded">
+                  <EmailIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Email" secondary={email} />
+              <LockIcon />
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar sx={{ bgcolor: green[500] }} variant="rounded">
+                  <PasswordIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Password" secondary="******" />
+              <Tooltip title="Edit">
+                <IconButton onClick={() => handleOpen("Password")}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </ListItem>
+          </List>
+        </Box>
+      </Paper>
+      <AccountModel open={open} handleClose={handleClose} type={type} />
+    </Box>
   );
 }
