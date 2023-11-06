@@ -5,6 +5,7 @@ import {
   SIGNUP,
   START_LOADING,
   STOP_LOADING,
+  UPDATE_USER_DATA,
   User,
   AuthActionTypes,
 } from "../actions/userActions";
@@ -33,6 +34,14 @@ export const userReducer = (state = initialState, action: AuthActionTypes) => {
         user: action.payload.user,
         token: action.payload.token,
         loading: false,
+      };
+    case UPDATE_USER_DATA:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          [action.payload.updateType]: action.payload.updateData,
+        },
       };
     case START_LOADING:
       return { ...state, loading: true };

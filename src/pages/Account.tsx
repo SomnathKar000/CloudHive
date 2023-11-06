@@ -19,10 +19,10 @@ import AccountModel from "../components/AccountModel";
 
 export default function InsetDividers() {
   const [open, setOpen] = useState<boolean>(false);
-  const [type, setType] = useState<string>("");
+  const [type, setType] = useState<"name" | "password">("name");
 
   const { user, loading } = useSelector((state: RootReducer) => state.auth);
-  if (loading) {
+  if (user === null && loading) {
     return (
       <Box sx={{ textAlign: "center", marginTop: "20%" }}>
         <CircularProgress size={80} />
@@ -33,7 +33,7 @@ export default function InsetDividers() {
   const name = user?.name;
   const email = user?.email;
   const handleClose = () => setOpen(false);
-  const handleOpen = (update: string) => {
+  const handleOpen = (update: "name" | "password") => {
     setType(update);
     setOpen(true);
   };
@@ -58,7 +58,7 @@ export default function InsetDividers() {
               <ListItemText primary="Name" secondary={name} />
 
               <Tooltip title="Edit">
-                <IconButton onClick={() => handleOpen("Name")}>
+                <IconButton onClick={() => handleOpen("name")}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
@@ -82,7 +82,7 @@ export default function InsetDividers() {
               </ListItemAvatar>
               <ListItemText primary="Password" secondary="******" />
               <Tooltip title="Edit">
-                <IconButton onClick={() => handleOpen("Password")}>
+                <IconButton onClick={() => handleOpen("password")}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>

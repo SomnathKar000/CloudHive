@@ -3,6 +3,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Button, TextField, Grid } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../redux/actions/userActions";
+import { createAlert } from "../redux/actions/alertActions";
+import { RootReducer } from "../redux/store";
 
 const style = {
   position: "absolute",
@@ -18,17 +23,45 @@ const style = {
 
 interface BasicModelProps {
   open: boolean;
-  type: string;
+  type: "name" | "password";
   handleClose: () => void;
 }
 
 const BasicModal: react.FC<BasicModelProps> = ({ open, handleClose, type }) => {
   const [updateData, setUpdateData] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state: RootReducer) => state.auth);
+  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(updateData, currentPassword);
+    if (type === "name" && updateData.length < 3) {
+      dispatch(
+        createAlert({
+          message: "Name must be at least 3 characters long",
+          type: "info",
+        })
+      );
+      return;
+    } else if (type === "password" && updateData.length < 5) {
+      dispatch(
+        createAlert({
+          message: "Password must be at least 5 characters long",
+          type: "info",
+        })
+      );
 
-  const handleSubmit = () => {
-    console.log(updateData, type, currentPassword);
-    handleClose();
+      return;
+    } else if (currentPassword.length < 5) {
+      dispatch(
+        createAlert({
+          message: "Password must be at least 5 characters long",
+          type: "info",
+        })
+      );
+      return;
+    }
+    updateUser(type, updateData, currentPassword)(dispatch);
   };
   return (
     <div>
@@ -72,15 +105,21 @@ const BasicModal: react.FC<BasicModelProps> = ({ open, handleClose, type }) => {
             gap={5}
             sx={{ mt: 3, display: "flex", justifyContent: "center" }}
           >
-            <Button
+            <LoadingButton
               variant="contained"
               color="success"
               type="submit"
+              loading={loading}
               onClick={handleSubmit}
             >
               Submit
-            </Button>
-            <Button variant="contained" color="error" onClick={handleClose}>
+            </LoadingButton>
+            <Button
+              disabled={loading}
+              variant="contained"
+              color="error"
+              onClick={handleClose}
+            >
               Close
             </Button>
           </Box>

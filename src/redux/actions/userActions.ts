@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   LOGIN_API_ENDPOINT,
   SIGNUP_API_ENDPOINT,
-  GET_USER_API_ENDPOINT,
+  GET_AND_UPDATE_USER_API_ENDPOINT,
 } from "../../services/userApis";
 import { getAllFiles } from "../actions/fileActions";
 import { createAlert, AlertActions } from "./alertActions";
@@ -18,6 +18,7 @@ export const LOGOUT = "LOGOUT";
 export const GET_USER = "GET_USER";
 export const START_LOADING = "START_LOADING";
 export const STOP_LOADING = "STOP_LOADING";
+export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 
 interface StartLoading {
   type: typeof START_LOADING;
@@ -55,6 +56,14 @@ interface GetUserAction {
   };
 }
 
+interface UpdateUserData {
+  type: typeof UPDATE_USER_DATA;
+  payload: {
+    updateType: "name" | "password";
+    updateData: string;
+  };
+}
+
 export type AuthActionTypes =
   | LoginAction
   | SignupAction
@@ -62,7 +71,8 @@ export type AuthActionTypes =
   | GetUserAction
   | StartLoading
   | StopLoading
-  | AlertActions;
+  | AlertActions
+  | UpdateUserData;
 
 export const loginAsync =
   ({ email, password }: { email: string; password: string }) =>
@@ -137,7 +147,7 @@ export const getUserAsync =
     dispatch({ type: START_LOADING });
     try {
       const token = localStorage.getItem("token")!;
-      const response = await axios.get(GET_USER_API_ENDPOINT, {
+      const response = await axios.get(GET_AND_UPDATE_USER_API_ENDPOINT, {
         headers: { "auth-token": token },
       });
 
@@ -167,3 +177,44 @@ export const logOutUser = () => (dispatch: Dispatch<AuthActionTypes>) => {
     createAlert({ message: "Logged out successfully", type: "success" })
   );
 };
+
+export const updateUser =
+  (
+    updateType: "password" | "name",
+    updateData: string,
+    currentPassword: string
+  ) =>
+  async (dispatch: Dispatch<AuthActionTypes>) => {
+    dispatch({ type: START_LOADING });
+    const token = localStorage.getItem("token");
+    try {
+      const responseData = {
+        [updateType]: updateData,
+        currentPassword,
+      };
+      const response = await axios.put(
+        GET_AND_UPDATE_USER_API_ENDPOINT,
+        responseData,
+        {
+          headers: { "auth-token": token },
+        }
+      );
+      if (updateType === "name") {
+        dispatch({
+          type: UPDATE_USER_DATA,
+          payload: { updateType: updateType, updateData: updateData },
+        });
+      }
+      console.log(response);
+      dispatch({ type: STOP_LOADING });
+      dispatch(
+        createAlert({ message: response.data.message, type: "success" })
+      );
+    } catch (error) {
+      dispatch({ type: STOP_LOADING });
+      const errorMessage =
+        error?.response.data.message ||
+        "An error occurred while updating user.";
+      createAlert({ message: errorMessage, type: "error" });
+    }
+  };
