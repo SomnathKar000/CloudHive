@@ -75,7 +75,7 @@ export default function SpeedDialWithModal() {
       <Box
         sx={{
           position: "fixed",
-          bottom: "50px",
+          bottom: "70px",
           right: "50px",
           color: theme.palette.text.primary,
         }}
@@ -106,7 +106,7 @@ export default function SpeedDialWithModal() {
               color: theme.palette.text.primary,
             }}
           >
-            Upload your file
+            Upload Your File
           </Typography>
           <UploadContainer>
             <label htmlFor="file-upload">

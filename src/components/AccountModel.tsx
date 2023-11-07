@@ -78,7 +78,7 @@ const BasicModal: react.FC<BasicModelProps> = ({ open, handleClose, type }) => {
             component="h2"
             mb={3}
           >
-            Update {type}
+            UPDATE {type.toUpperCase()}
           </Typography>
 
           <Grid container spacing={2}>
