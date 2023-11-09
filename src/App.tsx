@@ -4,6 +4,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
 import UserAccountPage from "./pages/Account";
+import PrivateRoute from "./components/PrivateRoute";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -24,10 +25,12 @@ function App() {
         <Navbar />
         <Alert />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/account" element={<UserAccountPage />} />
+          </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
-          <Route path="/account" element={<UserAccountPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
